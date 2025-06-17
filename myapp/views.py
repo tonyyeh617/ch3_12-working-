@@ -72,4 +72,29 @@ def index(request):
     # print(dataCount)
     # return HttpResponse("hello!")
     return render(request,"index.html", locals())
-
+from django.shortcuts import redirect
+def edit(request,id=None):
+    print(f"id={id}")
+    if request.method == "POST":
+        cName = request.POST["cName"]
+        cSex = request.POST["cSex"]
+        cBirthday = request.POST["cBirthday"]
+        cEmail = request.POST["cEmail"]
+        cPhone = request.POST["cPhone"]
+        cAddr = request.POST["cAddr"]
+        print(f"cName={cName},cSex={cSex},cBirthday={cBirthday},cEmail={cEmail},cPhone={cPhone},cAddr={cAddr}")
+        # orm
+        update = students.objects.get(cID=id)
+        update.cName = cName
+        update.cSex = cSex
+        update.cBirthday = cBirthday
+        update.cEmail = cEmail
+        update.cPhone = cPhone
+        update.cAddr = cAddr
+        update.save()
+        # return HttpResponse("hello!")
+        return redirect('/index/')
+    else:
+        obj_data = students.objects.get(cID=id)
+        print(model_to_dict(obj_data))
+        return render(request,"edit.html", locals())
